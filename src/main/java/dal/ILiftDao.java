@@ -12,11 +12,11 @@ public interface ILiftDao {
 
     List<Lift> getLiftsByUser(long userId);
 
-    void insertSquat(int reps, int sets, double weightLifted, Date dateLifted, long userStatId);
+    void insertSquat(Lift lift, long userStatId);
 
-    void insertBench(int reps, int sets, double weightLifted, Date dateLifted, long userStatId);
+    void insertBench(Lift lift, long userStatId);
 
-    void insertDeadlift(int reps, int sets, double weightLifted, Date dateLifted, long userStatId);
+    void insertDeadlift(Lift lift, long userStatId);
 
     void removeLift(long liftId);
 

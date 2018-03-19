@@ -8,6 +8,10 @@ public class UserStatDetail {
     private boolean isFemale;
     private int userStatId;
 
+    public UserStatDetail() {
+
+    }
+
     public UserStatDetail(int detailsId, int weight, boolean isMale, boolean isFemale, int userStatId) {
         this.detailsId = detailsId;
         this.weight = weight;

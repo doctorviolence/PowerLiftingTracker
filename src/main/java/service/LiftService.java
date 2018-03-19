@@ -19,7 +19,7 @@ public class LiftService implements ILiftService {
     }
 
     public void insertLiftIntoDatabase(Lift lift, long userStatId) {
-        if (lift.isSquat()) {
+    /*    if (lift.isSquat()) {
             int reps = lift.getReps();
             int sets = lift.getSets();
             double weightLifted = lift.getWeightLifted();
@@ -40,7 +40,7 @@ public class LiftService implements ILiftService {
             Date dateLifted = lift.getDateLifted();
 
             liftDao.insertDeadlift(reps, sets, weightLifted, dateLifted, userStatId);
-        }
+        }*/
     }
 
     public void deleteLiftFromDatabase(long liftId) {

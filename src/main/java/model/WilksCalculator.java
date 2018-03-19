@@ -1,15 +1,18 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.lang.Math.pow;
 
 public class WilksCalculator {
 
-    private Lift[] lifts = new Lift[3];
+    private UserStatDetail userStatDetail = new UserStatDetail();
+    public List<Lift> lifts = new ArrayList<>();
     private int i = 0;
 
     public void addLift(Lift lift) {
-        lifts[i] = lift;
-        i++;
+        lifts.add(lift);
     }
 
     private double getTotal() {
@@ -20,9 +23,11 @@ public class WilksCalculator {
         return total;
     }
 
-    public double calculateWilksScore(boolean male, boolean female, double bodyWeight) {
+    public double calculateWilksScore(double bodyWeight) {
         double coefficient;
         double score = 0;
+        boolean male = false;
+        boolean female = false;
 
         if (male && !female) {
             double a = -216.0475144;

@@ -17,9 +17,10 @@ public class LiftMapper implements RowMapper {
         l.setSets(rs.getInt("sets"));
         l.setWeightLifted(rs.getInt("weight_lifted"));
         l.setDateLifted(rs.getDate("date_lifted"));
-        l.setSquat(rs.getBoolean("is_squat"));
         l.setBench(rs.getBoolean("is_bench"));
+        l.setSquat(rs.getBoolean("is_squat"));
         l.setDeadlift(rs.getBoolean("is_deadlift"));
+        l.setUserStatId(rs.getInt("user_stat_id"));
 
         return l;
     }

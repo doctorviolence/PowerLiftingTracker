@@ -8,6 +8,7 @@ public class Lift {
     private int reps;
     private int sets;
     private double weightLifted;
+    private int userStatId;
     private Date dateLifted;
     private boolean squat;
     private boolean bench;
@@ -17,11 +18,10 @@ public class Lift {
 
     }
 
-    public Lift(int reps, int sets, double weightLifted, Date dateLifted) {
+    public Lift(int reps, int sets, double weightLifted) {
         this.reps = reps;
         this.sets = sets;
         this.weightLifted = weightLifted;
-        this.dateLifted = dateLifted;
     }
 
     public long getLiftId() {
@@ -64,6 +64,14 @@ public class Lift {
         this.dateLifted = dateLifted;
     }
 
+    public int getUserStatId() {
+        return userStatId;
+    }
+
+    public void setUserStatId(int userStatId) {
+        this.userStatId = userStatId;
+    }
+
     public void setSquat(boolean squat) {
         this.squat = squat;
     }
@@ -88,4 +96,16 @@ public class Lift {
         return deadlift && !bench && !squat;
     }
 
+    @Override
+    public String toString() {
+        if (isBench()) {
+            return "Bench " + bench;
+        } else if (isSquat()) {
+            return "Squat " + squat;
+        } else if (isDeadlift()) {
+            return "Deadlift " + deadlift;
+        } else {
+            return "Lift is neither squat, bench, or deadlift.";
+        }
+    }
 }
