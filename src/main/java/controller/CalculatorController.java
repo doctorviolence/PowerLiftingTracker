@@ -9,7 +9,7 @@ import service.CalculatorService;
 import java.util.List;
 
 @RestController
-public class CalculatorController {
+class CalculatorController {
 
     private CalculatorService service;
 

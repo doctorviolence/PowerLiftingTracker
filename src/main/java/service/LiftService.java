@@ -14,33 +14,18 @@ public class LiftService implements ILiftService {
     LiftDao liftDao;
 
     @Autowired
-    public LiftService(LiftDao liftDao){
+    public LiftService(LiftDao liftDao) {
         this.liftDao = liftDao;
     }
 
     public void insertLiftIntoDatabase(Lift lift, long userStatId) {
-    /*    if (lift.isSquat()) {
-            int reps = lift.getReps();
-            int sets = lift.getSets();
-            double weightLifted = lift.getWeightLifted();
-            Date dateLifted = lift.getDateLifted();
-
-            liftDao.insertSquat(reps, sets, weightLifted, dateLifted, userStatId);
+        if (lift.isSquat()) {
+            liftDao.insertSquat(lift, userStatId);
         } else if (lift.isBench()) {
-            int reps = lift.getReps();
-            int sets = lift.getSets();
-            double weightLifted = lift.getWeightLifted();
-            Date dateLifted = lift.getDateLifted();
-
-            liftDao.insertBench(reps, sets, weightLifted, dateLifted, userStatId);
+            liftDao.insertBench(lift, userStatId);
         } else if (lift.isDeadlift()) {
-            int reps = lift.getReps();
-            int sets = lift.getSets();
-            double weightLifted = lift.getWeightLifted();
-            Date dateLifted = lift.getDateLifted();
-
-            liftDao.insertDeadlift(reps, sets, weightLifted, dateLifted, userStatId);
-        }*/
+            liftDao.insertDeadlift(lift, userStatId);
+        }
     }
 
     public void deleteLiftFromDatabase(long liftId) {

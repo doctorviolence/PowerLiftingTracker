@@ -3,7 +3,6 @@ package dal;
 import model.Lift;
 
 import javax.sql.DataSource;
-import java.util.Date;
 import java.util.List;
 
 public interface ILiftDao {
