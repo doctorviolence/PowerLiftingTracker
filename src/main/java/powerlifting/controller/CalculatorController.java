@@ -1,14 +1,14 @@
-package controller;
+package powerlifting.controller;
 
-import model.Lift;
+import powerlifting.model.Lift;
 import org.assertj.core.util.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.CalculatorService;
+import powerlifting.service.CalculatorService;
 
 import java.util.List;
 
-@RestController
+@RestController("calculator")
 class CalculatorController {
 
     private CalculatorService service;
@@ -18,7 +18,7 @@ class CalculatorController {
         this.service = service;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    //@RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public void create(@RequestBody List<Lift> lifts) {
         Preconditions.checkNotNull(lifts);

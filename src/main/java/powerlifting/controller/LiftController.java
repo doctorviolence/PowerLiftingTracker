@@ -1,15 +1,15 @@
-package controller;
+package powerlifting.controller;
 
-import model.Lift;
+import powerlifting.model.Lift;
 import org.assertj.core.util.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import service.LiftService;
+import powerlifting.service.LiftService;
 
 import java.util.List;
 
-@RestController
+@RestController("lift")
 class LiftController {
 
     private LiftService service;
@@ -19,16 +19,22 @@ class LiftController {
         this.service = service;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping("getliftsbyuser")
     @ResponseBody
-    public List<Lift> getLiftsByUser(long id) {
+    public List<Lift> getLiftsByUser(Long id) {
         return service.getLiftsByUser(id);
+    }
+
+    @RequestMapping("getlifts")
+    @ResponseBody
+    public List<Lift> getAllLifts() {
+        return service.getAllLiftsInDb();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public void create(@RequestBody Lift lift, long id) {
+    public void create(@RequestBody Lift lift, Long id) {
         Preconditions.checkNotNull(lift);
         service.insertLiftIntoDatabase(lift, id);
     }

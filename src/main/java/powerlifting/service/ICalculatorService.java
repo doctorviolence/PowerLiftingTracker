@@ -1,6 +1,6 @@
-package service;
+package powerlifting.service;
 
-import model.Lift;
+import powerlifting.model.Lift;
 
 import java.util.List;
 

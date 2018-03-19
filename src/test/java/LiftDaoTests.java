@@ -1,6 +1,6 @@
-import config.ApplicationConfig;
-import dal.LiftDao;
-import model.Lift;
+import powerlifting.config.ApplicationConfig;
+import powerlifting.dal.LiftDao;
+import powerlifting.model.Lift;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

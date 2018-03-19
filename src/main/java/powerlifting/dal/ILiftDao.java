@@ -1,6 +1,6 @@
-package dal;
+package powerlifting.dal;
 
-import model.Lift;
+import powerlifting.model.Lift;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -10,6 +10,8 @@ public interface ILiftDao {
     void setDataSource(DataSource ds);
 
     List<Lift> getLiftsByUser(long userId);
+
+    List<Lift> getAllLiftsInDb();
 
     void insertSquat(Lift lift, long userStatId);
 

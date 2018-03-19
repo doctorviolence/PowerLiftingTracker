@@ -1,4 +1,4 @@
-package model;
+package powerlifting.model;
 
 import java.util.Date;
 

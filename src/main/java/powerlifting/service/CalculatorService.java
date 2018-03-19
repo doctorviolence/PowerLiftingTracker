@@ -1,7 +1,7 @@
-package service;
+package powerlifting.service;
 
-import model.Lift;
-import model.WilksCalculator;
+import powerlifting.model.Lift;
+import powerlifting.model.WilksCalculator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

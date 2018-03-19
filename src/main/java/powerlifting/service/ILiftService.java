@@ -1,6 +1,6 @@
-package service;
+package powerlifting.service;
 
-import model.Lift;
+import powerlifting.model.Lift;
 
 import java.util.List;
 
@@ -11,5 +11,7 @@ public interface ILiftService {
     void deleteLiftFromDatabase(long id);
 
     List<Lift> getLiftsByUser(long userId);
+
+    List<Lift> getAllLiftsInDb();
 
 }

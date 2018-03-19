@@ -1,7 +1,7 @@
-package dal;
+package powerlifting.dal;
 
-import dal.mapper.LiftMapper;
-import model.Lift;
+import powerlifting.dal.mapper.LiftMapper;
+import powerlifting.model.Lift;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -35,6 +35,10 @@ public class LiftDao implements ILiftDao {
                 "AND u.user_id = ? " +
                 "AND s.user_stat_id = l.user_stat_id " +
                 "ORDER BY date_lifted;", new LiftMapper(), new Object[]{userId});
+    }
+
+    public List<Lift> getAllLiftsInDb() {
+        return this.jdbcTemplate.query("SELECT * FROM Lifts", new LiftMapper());
     }
 
     public void insertSquat(Lift lift, long userStatId) {

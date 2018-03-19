@@ -1,11 +1,12 @@
-package config;
+package powerlifting.config;
 
-import dal.LiftDao;
+import powerlifting.dal.LiftDao;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
+
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import powerlifting.model.WilksCalculator;
+import powerlifting.service.LiftService;
 
 import javax.sql.DataSource;
 
@@ -19,13 +20,18 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public LiftDao jdbcPersonDao(){
+    public LiftDao jdbcPersonDao() {
         return new LiftDao();
     }
 
     @Bean
+    public WilksCalculator wilksCalculator() {
+        return new WilksCalculator();
+    }
+
+    @Bean
     public DataSource dataSource() {
-        ds.setDriverClassName("com.mysql.jdbc.Driver");
+        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
         ds.setUrl("jdbc:mysql://localhost:3306/powerlifting_tracker");
         ds.setUsername("root");
         ds.setPassword("eIhuJk-dq2Jd");

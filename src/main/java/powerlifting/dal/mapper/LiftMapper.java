@@ -1,6 +1,6 @@
-package dal.mapper;
+package powerlifting.dal.mapper;
 
-import model.Lift;
+import powerlifting.model.Lift;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

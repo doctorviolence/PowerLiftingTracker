@@ -1,11 +1,10 @@
-package service;
+package powerlifting.service;
 
-import dal.LiftDao;
-import model.Lift;
+import powerlifting.dal.LiftDao;
+import powerlifting.model.Lift;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service("liftService")
@@ -34,6 +33,10 @@ public class LiftService implements ILiftService {
 
     public List<Lift> getLiftsByUser(long userId) {
         return liftDao.getLiftsByUser(userId);
+    }
+
+    public List<Lift> getAllLiftsInDb() {
+        return liftDao.getAllLiftsInDb();
     }
 
 }
