@@ -5,16 +5,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class Lift {
+public abstract class Lift {
 
     private long liftId;
     private int reps;
     private int sets;
     private double weightLifted;
     private int userId;
-    private boolean squat;
-    private boolean bench;
-    private boolean deadlift;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -78,7 +75,7 @@ public class Lift {
         this.userId = userId;
     }
 
-    public void setSquat(boolean squat) {
+    /*public void setSquat(boolean squat) {
         this.squat = squat;
     }
 
@@ -113,5 +110,5 @@ public class Lift {
         } else {
             return "Lift is neither squat, bench, or deadlift.";
         }
-    }
+    }*/
 }

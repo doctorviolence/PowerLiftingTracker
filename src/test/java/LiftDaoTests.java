@@ -1,5 +1,7 @@
 import powerlifting.config.ApplicationConfig;
 import powerlifting.dal.LiftDao;
+import powerlifting.model.Bench;
+import powerlifting.model.Deadlift;
 import powerlifting.model.Lift;
 import org.junit.After;
 import org.junit.Assert;
@@ -13,6 +15,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import powerlifting.model.Squat;
 
 import java.util.List;
 
@@ -44,9 +47,7 @@ public class LiftDaoTests {
 
     @Test
     public void testInsertLiftIntoDb() {
-        Lift bench = new Lift(5, 5, 100);
-
-        liftDao.insertBench(bench, 1);
+        liftDao.insertBench(5, 5, 100, null, 1);
 
         List<Lift> getLifts = liftDao.getLiftsByUser(1);
 
@@ -68,25 +69,15 @@ public class LiftDaoTests {
 
     @Test
     public void testLiftType() {
-        Lift bench = new Lift(1, 1, 100);
-
-        liftDao.insertBench(bench, 1);
+        liftDao.insertBench(1, 1, 100, null, 1);
 
         List<Lift> getLifts = liftDao.getLiftsByUser(1);
         Assert.assertNotNull(getLifts);
         Assert.assertTrue(getLifts.size() == 2);
 
         for (Lift l : getLifts) {
-            if (l.isBench()) {
-                String test = l.toString();
-                Assert.assertEquals(test, "Bench true");
-            } else if (l.isSquat()) {
-                String test = l.toString();
-                Assert.assertEquals(test, "Squat true");
-            } else if (l.isDeadlift()) {
-                String test = l.toString();
-                Assert.assertEquals(test, "Deadlift true");
-            }
+            if (l.getClass() == Bench.class && l.getClass() != Deadlift.class && l.getClass() != Squat.class)
+                Assert.assertTrue(l.getClass() == Bench.class);
         }
 
     }
@@ -100,9 +91,7 @@ public class LiftDaoTests {
         Assert.assertTrue(getLiftsByUser1.size() == 1);
         Assert.assertTrue(getLiftsByUser2.size() == 1);
 
-        Lift bench = new Lift(1, 1, 100);
-
-        liftDao.insertBench(bench, 1);
+        liftDao.insertBench(1, 1, 100, null, 1);
         liftDao.removeLift(2);
 
         List<Lift> getUpdatedLiftsByUser1 = liftDao.getLiftsByUser(1);

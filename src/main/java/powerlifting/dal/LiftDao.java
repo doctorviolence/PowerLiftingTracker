@@ -1,10 +1,15 @@
 package powerlifting.dal;
 
-import powerlifting.dal.mapper.LiftMapper;
+import powerlifting.dal.mapper.BenchMapper;
+import powerlifting.dal.mapper.DeadliftMapper;
+import powerlifting.dal.mapper.SquatMapper;
+import powerlifting.model.Bench;
+import powerlifting.model.Deadlift;
 import powerlifting.model.Lift;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import powerlifting.model.Squat;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -29,60 +34,45 @@ public class LiftDao implements ILiftDao {
 
     @SuppressWarnings("unchecked")
     public List<Lift> getLiftsByUser(long userId) {
-        String sql = "SELECT l.lift_id, l.reps, l.sets, l.weight_lifted, l.is_bench, l.is_deadlift, l.is_squat, l.date_lifted, l.user_id " +
-                "FROM lifts l, users u " +
-                "WHERE u.user_id = l.user_id " +
+        String sql = "SELECT * " +
+                "FROM bench_lifts b, squat_lifts s, deadlift_lifts d, users u " +
+                "WHERE u.user_id = b.user_id " +
                 "AND u.user_id = ? " +
                 "ORDER BY date_lifted;";
 
-        List lifts = getJdbcTemplate().query(sql, new LiftMapper(), new Object[]{userId});
+        List lifts = getJdbcTemplate().query(sql, new SquatMapper(), new BenchMapper(), new DeadliftMapper(), new Object[]{userId});
 
         return lifts;
     }
 
     public List<Lift> getAllLiftsInDb() {
-        String sql = "SELECT * FROM lifts";
+        String sql = "SELECT * FROM bench_lifts b, squat_lifts s, deadlift_lifts d";
 
-        List lifts = getJdbcTemplate().query(sql, new LiftMapper());
+        List lifts = getJdbcTemplate().query(sql, new SquatMapper(), new BenchMapper(), new DeadliftMapper());
 
         return lifts;
     }
 
-    public void insertSquat(Lift lift, long userId) {
-        String sql = "INSERT INTO lifts VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public void insertSquat(int reps, int sets, double weightLifted, Date dateLifted, long userId) {
+        String sql = "INSERT INTO squat_lifts VALUES(0, ?, ?, ?, ?, ?, ?)";
 
-        int reps = lift.getReps();
-        int sets = lift.getSets();
-        double weightLifted = lift.getWeightLifted();
-        Date dateLifted = new Date(System.currentTimeMillis());
-
-        getJdbcTemplate().update(sql, new Object[]{reps, sets, weightLifted, dateLifted, false, true, false, userId});
+        getJdbcTemplate().update(sql, new Object[]{reps, sets, weightLifted, dateLifted, true, userId});
     }
 
-    public void insertBench(Lift lift, long userId) {
-        String sql = "INSERT INTO lifts VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public void insertBench(int reps, int sets, double weightLifted, Date dateLifted, long userId) {
+        String sql = "INSERT INTO bench_lifts VALUES(0, ?, ?, ?, ?, ?, ?)";
 
-        int reps = lift.getReps();
-        int sets = lift.getSets();
-        double weightLifted = lift.getWeightLifted();
-        Date dateLifted = new Date(System.currentTimeMillis());
-
-        getJdbcTemplate().update(sql, new Object[]{reps, sets, weightLifted, dateLifted, true, false, false, userId});
+        getJdbcTemplate().update(sql, new Object[]{reps, sets, weightLifted, dateLifted, true, userId});
     }
 
-    public void insertDeadlift(Lift lift, long userId) {
-        String sql = "INSERT INTO lifts VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public void insertDeadlift(int reps, int sets, double weightLifted, Date dateLifted, long userId) {
+        String sql = "INSERT INTO deadlift_lifts VALUES(0, ?, ?, ?, ?, ?, ?)";
 
-        int reps = lift.getReps();
-        int sets = lift.getSets();
-        double weightLifted = lift.getWeightLifted();
-        Date dateLifted = new Date(System.currentTimeMillis());
-
-        getJdbcTemplate().update(sql, new Object[]{reps, sets, weightLifted, dateLifted, false, false, true, userId});
+        getJdbcTemplate().update(sql, new Object[]{reps, sets, weightLifted, dateLifted, true, userId});
     }
 
     public void removeLift(long liftId) {
-        String sql = "DELETE FROM lifts WHERE lift_id = ?";
+        String sql = "DELETE FROM bench_lifts WHERE bench_id = ?";
 
         getJdbcTemplate().update(sql, new Object[]{liftId});
     }
