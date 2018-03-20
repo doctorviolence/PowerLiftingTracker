@@ -10,19 +10,19 @@ public class LiftMapper implements RowMapper {
 
     @Override
     public Object mapRow(ResultSet rs, int row) throws SQLException {
-        Lift l = new Lift();
+        Lift lift = new Lift();
 
-        l.setLiftId(rs.getInt("lift_id"));
-        l.setReps(rs.getInt("reps"));
-        l.setSets(rs.getInt("sets"));
-        l.setWeightLifted(rs.getInt("weight_lifted"));
-        l.setDateLifted(rs.getDate("date_lifted"));
-        l.setBench(rs.getBoolean("is_bench"));
-        l.setSquat(rs.getBoolean("is_squat"));
-        l.setDeadlift(rs.getBoolean("is_deadlift"));
-        l.setUserStatId(rs.getInt("user_stat_id"));
+        lift.setLiftId(rs.getInt("lift_id"));
+        lift.setReps(rs.getInt("reps"));
+        lift.setSets(rs.getInt("sets"));
+        lift.setWeightLifted(rs.getInt("weight_lifted"));
+        lift.setDateLifted(rs.getDate("date_lifted"));
+        lift.setBench(rs.getBoolean("is_bench"));
+        lift.setSquat(rs.getBoolean("is_squat"));
+        lift.setDeadlift(rs.getBoolean("is_deadlift"));
+        lift.setUserId(rs.getInt("user_id"));
 
-        return l;
+        return lift;
     }
 
 }

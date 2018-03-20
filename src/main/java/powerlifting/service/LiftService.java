@@ -1,6 +1,6 @@
 package powerlifting.service;
 
-import powerlifting.dal.LiftDao;
+import powerlifting.dal.ILiftDao;
 import powerlifting.model.Lift;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,10 +10,10 @@ import java.util.List;
 @Service("liftService")
 public class LiftService implements ILiftService {
 
-    LiftDao liftDao;
+    ILiftDao liftDao;
 
     @Autowired
-    public LiftService(LiftDao liftDao) {
+    public LiftService(ILiftDao liftDao) {
         this.liftDao = liftDao;
     }
 

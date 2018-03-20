@@ -7,12 +7,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import powerlifting.service.LiftService;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController("lift")
-class LiftController {
+public class LiftController {
 
     private LiftService service;
+
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Autowired
     public LiftController(LiftService service){

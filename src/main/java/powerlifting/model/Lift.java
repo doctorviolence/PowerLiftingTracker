@@ -1,5 +1,8 @@
 package powerlifting.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Lift {
@@ -8,11 +11,14 @@ public class Lift {
     private int reps;
     private int sets;
     private double weightLifted;
-    private int userStatId;
-    private Date dateLifted;
+    private int userId;
     private boolean squat;
     private boolean bench;
     private boolean deadlift;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date dateLifted;
 
     public Lift() {
 
@@ -64,12 +70,12 @@ public class Lift {
         this.dateLifted = dateLifted;
     }
 
-    public int getUserStatId() {
-        return userStatId;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserStatId(int userStatId) {
-        this.userStatId = userStatId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public void setSquat(boolean squat) {

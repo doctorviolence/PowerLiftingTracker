@@ -33,9 +33,13 @@ public class LiftDaoTests {
                 .addScripts("liftdaotests.sql")
                 .build();
 
-        liftDao = new LiftDao();
         liftDao.setDataSource(database);
         liftDao.postConstruct();
+    }
+
+    @Test
+    public void daoInitializedCorrectly() {
+        Assert.assertNotNull(liftDao);
     }
 
     @Test
@@ -110,6 +114,7 @@ public class LiftDaoTests {
 
     @After
     public void tearDown() {
+        liftDao = null;
         database.shutdown();
     }
 

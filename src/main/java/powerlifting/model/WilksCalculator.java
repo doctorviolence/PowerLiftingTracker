@@ -7,7 +7,7 @@ import static java.lang.Math.pow;
 
 public class WilksCalculator {
 
-    private UserStatDetail userStatDetail = new UserStatDetail();
+    private User user = new User();
     public List<Lift> lifts = new ArrayList<>();
     private int i = 0;
 

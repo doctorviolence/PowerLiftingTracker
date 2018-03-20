@@ -5,11 +5,11 @@ public class User {
     private int userId;
     private String userName;
     private String password;
+    private boolean isMale;
+    private boolean isFemale;
 
-    public User(int userId, String userName, String password) {
-        this.userId = userId;
-        this.userName = userName;
-        this.password = password;
+    public User() {
+
     }
 
     public int getUserId() {
@@ -36,8 +36,24 @@ public class User {
         this.password = password;
     }
 
+    public boolean isFemale() {
+        return isFemale;
+    }
+
+    public void setFemale(boolean female) {
+        isFemale = female;
+    }
+
+    public boolean isMale() {
+        return isMale;
+    }
+
+    public void setMale(boolean male) {
+        isMale = male;
+    }
+
     @Override
-    public String toString(){
-        return "User Id: " + userId + "Username: " + userName;
+    public String toString() {
+        return "Id: " + userId + "Username: " + userName + " Male: " + isMale + " Female: " + isFemale;
     }
 }
