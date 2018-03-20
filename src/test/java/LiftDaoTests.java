@@ -30,7 +30,7 @@ public class LiftDaoTests {
         database = new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
                 .addScript("powerlifting_tracker.sql")
-                .addScripts("liftdaotests.sql")
+                .addScripts("daotests.sql")
                 .build();
 
         liftDao.setDataSource(database);

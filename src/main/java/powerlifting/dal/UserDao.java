@@ -32,21 +32,23 @@ public class UserDao implements IUserDao {
     }
 
     public void addNewFemaleUserToDb(User user) {
-        String sql = "INSERT INTO users VALUES(0, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users VALUES(?, ?, ?, ?, ?)";
 
+        long id = user.getUserId();
         String username = user.getUserName();
         String pw = user.getPassword();
 
-        getJdbcTemplate().update(sql, new Object[]{username, false, true, pw});
+        getJdbcTemplate().update(sql, new Object[]{id ,username, false, true, pw});
     }
 
     public void addNewMaleUserToDb(User user) {
-        String sql = "INSERT INTO users VALUES(0, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users VALUES(?, ?, ?, ?, ?)";
 
+        long id = user.getUserId();
         String username = user.getUserName();
         String pw = user.getPassword();
 
-        getJdbcTemplate().update(sql, new Object[]{username, true, false, pw});
+        getJdbcTemplate().update(sql, new Object[]{id, username, true, false, pw});
     }
 
     public void changeUserPassword(long id, String pw) {
