@@ -36,12 +36,28 @@ public class LiftService implements ILiftService {
         }
     }
 
-    public void deleteLiftFromDatabase(long liftId) {
-        liftDao.removeLift(liftId);
+    public void deleteSquatFromDatabase(long liftId, long userId) {
+        liftDao.removeSquat(liftId, userId);
     }
 
-    public List<Lift> getLiftsByUser(long userId) {
-        return liftDao.getLiftsByUser(userId);
+    public void deleteBenchFromDatabase(long liftId, long userId) {
+        liftDao.removeBench(liftId, userId);
+    }
+
+    public void deleteDeadliftFromDatabase(long liftId, long userId) {
+        liftDao.removeDeadlift(liftId, userId);
+    }
+
+    public List<Squat> getSquatByUserFromDao(long userId) {
+        return liftDao.getSquatByUser(userId);
+    }
+
+    public List<Bench> getBenchByUserFromDao(long userId) {
+        return liftDao.getBenchByUser(userId);
+    }
+
+    public List<Deadlift> getDeadliftByUserFromDao(long userId) {
+        return liftDao.getDeadliftByUser(userId);
     }
 
     public List<Lift> getAllLiftsInDb() {

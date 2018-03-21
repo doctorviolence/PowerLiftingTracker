@@ -49,21 +49,21 @@ public class LiftDaoTests {
     public void testInsertLiftIntoDb() {
         liftDao.insertBench(5, 5, 100, null, 1);
 
-        List<Lift> getLifts = liftDao.getLiftsByUser(1);
+        List<Bench> getLifts = liftDao.getBenchByUser(1);
 
         Assert.assertNotNull(getLifts);
         Assert.assertTrue(getLifts.size() == 2);
 
-        int c = JdbcTestUtils.countRowsInTable(liftDao.getJdbcTemplate(), "lifts");
+        int c = JdbcTestUtils.countRowsInTable(liftDao.getJdbcTemplate(), "bench_lifts");
         Assert.assertTrue(c == 3);
 
     }
 
     @Test
     public void testDeleteLiftFromDb() {
-        liftDao.removeLift(1);
+        liftDao.removeBench(1, 1);
 
-        int c = JdbcTestUtils.countRowsInTable(liftDao.getJdbcTemplate(), "lifts");
+        int c = JdbcTestUtils.countRowsInTable(liftDao.getJdbcTemplate(), "bench_lifts");
         Assert.assertTrue(c == 1);
     }
 
@@ -71,13 +71,26 @@ public class LiftDaoTests {
     public void testLiftType() {
         liftDao.insertBench(1, 1, 100, null, 1);
 
-        List<Lift> getLifts = liftDao.getLiftsByUser(1);
+        List<Bench> getLifts = liftDao.getBenchByUser(1);
+        List<Squat> getLifts2 = liftDao.getSquatByUser(2);
+
         Assert.assertNotNull(getLifts);
+        Assert.assertNotNull(getLifts2);
+
         Assert.assertTrue(getLifts.size() == 2);
+        Assert.assertTrue(getLifts2.size() == 1);
 
         for (Lift l : getLifts) {
             if (l.getClass() == Bench.class && l.getClass() != Deadlift.class && l.getClass() != Squat.class)
                 Assert.assertTrue(l.getClass() == Bench.class);
+        }
+
+        for (Lift l : getLifts) {
+            System.out.println(l.toString());
+        }
+
+        for (Lift l : getLifts2) {
+            System.out.println(l.toString());
         }
 
     }
@@ -85,17 +98,17 @@ public class LiftDaoTests {
     @Test
     public void testLiftByDifferentUsers() {
 
-        List<Lift> getLiftsByUser1 = liftDao.getLiftsByUser(1);
-        List<Lift> getLiftsByUser2 = liftDao.getLiftsByUser(2);
+        List<Bench> getLiftsByUser1 = liftDao.getBenchByUser(1);
+        List<Bench> getLiftsByUser2 = liftDao.getBenchByUser(2);
 
         Assert.assertTrue(getLiftsByUser1.size() == 1);
         Assert.assertTrue(getLiftsByUser2.size() == 1);
 
         liftDao.insertBench(1, 1, 100, null, 1);
-        liftDao.removeLift(2);
+        liftDao.removeBench(2, 2);
 
-        List<Lift> getUpdatedLiftsByUser1 = liftDao.getLiftsByUser(1);
-        List<Lift> getUpdatedLiftsByUser2 = liftDao.getLiftsByUser(2);
+        List<Bench> getUpdatedLiftsByUser1 = liftDao.getBenchByUser(1);
+        List<Bench> getUpdatedLiftsByUser2 = liftDao.getBenchByUser(2);
 
         Assert.assertTrue(getUpdatedLiftsByUser1.size() == 2);
         Assert.assertTrue(getUpdatedLiftsByUser2.size() == 0);

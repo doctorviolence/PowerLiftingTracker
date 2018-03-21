@@ -11,6 +11,7 @@ public class DeadliftMapper extends LiftMapper<Deadlift> {
     public Deadlift mapRow(ResultSet rs, int rowNum) throws SQLException {
         Deadlift deadlift = new Deadlift();
         mapBase(rs, deadlift);
+        deadlift.setLiftId(rs.getInt("deadlift_id"));
         deadlift.setDeadlift(rs.getBoolean("is_deadlift"));
 
         return deadlift;

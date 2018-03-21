@@ -11,6 +11,7 @@ public class BenchMapper extends LiftMapper<Bench> {
     public Bench mapRow(ResultSet rs, int rowNum) throws SQLException {
         Bench bench = new Bench();
         mapBase(rs, bench);
+        bench.setLiftId(rs.getInt("bench_id"));
         bench.setBench(rs.getBoolean("is_bench"));
 
         return bench;

@@ -75,40 +75,9 @@ public abstract class Lift {
         this.userId = userId;
     }
 
-    /*public void setSquat(boolean squat) {
-        this.squat = squat;
-    }
-
-    public void setBench(boolean bench) {
-        this.bench = bench;
-    }
-
-    public void setDeadlift(boolean deadlift) {
-        this.deadlift = deadlift;
-    }
-
-    public boolean isSquat() {
-        return squat && !deadlift && !bench;
-    }
-
-    public boolean isBench() {
-        return bench && !deadlift && !squat;
-    }
-
-    public boolean isDeadlift() {
-        return deadlift && !bench && !squat;
-    }
-
     @Override
-    public String toString() {
-        if (isBench()) {
-            return "Bench " + bench;
-        } else if (isSquat()) {
-            return "Squat " + squat;
-        } else if (isDeadlift()) {
-            return "Deadlift " + deadlift;
-        } else {
-            return "Lift is neither squat, bench, or deadlift.";
-        }
-    }*/
+    public String toString(){
+        return "ID:" + liftId + " " + getClass() + " User ID: " + userId;
+    }
+
 }

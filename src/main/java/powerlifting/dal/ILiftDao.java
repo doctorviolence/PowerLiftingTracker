@@ -15,6 +15,12 @@ public interface ILiftDao {
 
     List<Lift> getLiftsByUser(long userId);
 
+    List<Squat> getSquatByUser(long userId);
+
+    List<Bench> getBenchByUser(long userId);
+
+    List<Deadlift> getDeadliftByUser(long userId);
+
     List<Lift> getAllLiftsInDb();
 
     void insertSquat(int reps, int sets, double weightLifted, Date dateLifted, long userId);
@@ -23,6 +29,10 @@ public interface ILiftDao {
 
     void insertDeadlift(int reps, int sets, double weightLifted, Date dateLifted, long userId);
 
-    void removeLift(long liftId);
+    void removeSquat(long liftId, long userId);
+
+    void removeBench(long liftId, long userId);
+
+    void removeDeadlift(long liftId, long userId);
 
 }

@@ -11,6 +11,7 @@ public class SquatMapper extends LiftMapper<Squat> {
     public Squat mapRow(ResultSet rs, int rowNum) throws SQLException {
         Squat squat = new Squat();
         mapBase(rs, squat);
+        squat.setLiftId(rs.getInt("squat_id"));
         squat.setSquat(rs.getBoolean("is_squat"));
 
         return squat;
