@@ -60,8 +60,4 @@ public class LiftService implements ILiftService {
         return liftDao.getDeadliftByUser(userId);
     }
 
-    public List<Lift> getAllLiftsInDb() {
-        return liftDao.getAllLiftsInDb();
-    }
-
 }

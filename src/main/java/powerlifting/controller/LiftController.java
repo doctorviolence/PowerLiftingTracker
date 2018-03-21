@@ -13,7 +13,7 @@ import powerlifting.service.LiftService;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-@RestController("lift")
+@RestController("liftController")
 public class LiftController {
 
     private LiftService service;
@@ -25,28 +25,22 @@ public class LiftController {
         this.service = service;
     }
 
-    @RequestMapping("getliftsbyuser")
+    @GetMapping("/{id}/squat")
     @ResponseBody
     public List<Squat> getSquatByUser(Long id) {
         return service.getSquatByUserFromDao(id);
     }
 
-    @RequestMapping("getliftsbyuser")
+    @GetMapping("/{id}/bench")
     @ResponseBody
     public List<Bench> getBenchByUser(Long id) {
         return service.getBenchByUserFromDao(id);
     }
 
-    @RequestMapping("getliftsbyuser")
+    @GetMapping("/{id}/deadlift")
     @ResponseBody
     public List<Deadlift> getDeadliftByUser(Long id) {
         return service.getDeadliftByUserFromDao(id);
-    }
-
-    @RequestMapping("getlifts")
-    @ResponseBody
-    public List<Lift> getAllLifts() {
-        return service.getAllLiftsInDb();
     }
 
     @RequestMapping(method = RequestMethod.POST)

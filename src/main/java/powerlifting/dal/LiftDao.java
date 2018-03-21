@@ -90,14 +90,6 @@ public class LiftDao implements ILiftDao {
         return lifts;
     }
 
-    public List<Lift> getAllLiftsInDb() {
-        String sql = "SELECT * FROM bench_lifts b";
-
-        List lifts = getJdbcTemplate().query(sql, new BenchMapper());
-
-        return lifts;
-    }
-
     public void insertSquat(int reps, int sets, double weightLifted, Date dateLifted, long userId) {
         String sql = "INSERT INTO squat_lifts(reps, sets, weight_lifted, date_lifted, is_squat, user_id) VALUES(?, ?, ?, ?, ?, ?)";
 

@@ -21,8 +21,6 @@ public interface ILiftDao {
 
     List<Deadlift> getDeadliftByUser(long userId);
 
-    List<Lift> getAllLiftsInDb();
-
     void insertSquat(int reps, int sets, double weightLifted, Date dateLifted, long userId);
 
     void insertBench(int reps, int sets, double weightLifted, Date dateLifted, long userId);

@@ -23,6 +23,4 @@ public interface ILiftService {
 
     List<Deadlift> getDeadliftByUserFromDao(long userId);
 
-    List<Lift> getAllLiftsInDb();
-
 }

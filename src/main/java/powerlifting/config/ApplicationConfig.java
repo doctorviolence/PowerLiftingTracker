@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import powerlifting.dal.UserDao;
+import powerlifting.model.Bench;
 import powerlifting.model.WilksCalculator;
 import powerlifting.service.LiftService;
 
@@ -29,11 +30,6 @@ public class ApplicationConfig {
     @Bean
     public UserDao jdbcUserDao() {
         return new UserDao();
-    }
-
-    @Bean
-    public LiftService liftService() {
-        return new LiftService(jdbcLiftDao());
     }
 
     @Bean
