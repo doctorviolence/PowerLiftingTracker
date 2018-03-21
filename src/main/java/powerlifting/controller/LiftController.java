@@ -1,5 +1,6 @@
 package powerlifting.controller;
 
+import org.springframework.http.MediaType;
 import powerlifting.model.Bench;
 import powerlifting.model.Deadlift;
 import powerlifting.model.Lift;
@@ -33,7 +34,7 @@ public class LiftController {
 
     @GetMapping("/{id}/bench")
     @ResponseBody
-    public List<Bench> getBenchByUser(Long id) {
+    public List<Bench> getBenchByUser(@RequestParam(required = true) Long id) {
         return service.getBenchByUserFromDao(id);
     }
 
@@ -43,7 +44,7 @@ public class LiftController {
         return service.getDeadliftByUserFromDao(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public void create(@RequestBody Lift lift, Long id) {

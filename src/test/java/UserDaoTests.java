@@ -9,6 +9,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import powerlifting.config.ApplicationConfig;
 import powerlifting.dal.UserDao;
 import powerlifting.model.User;
@@ -36,7 +37,7 @@ public class UserDaoTests {
     }
 
     @Test
-    public void insertNewMaleUser() {
+    public void testInsertNewMaleUser() {
         User user = new User();
         user.setUserId(1234);
         user.setUserName("test");
@@ -50,6 +51,25 @@ public class UserDaoTests {
         Assert.assertEquals("test", test.getUserName());
         Assert.assertEquals("password", test.getPassword());
         Assert.assertEquals(true, test.isMale());
+    }
+
+    @Test
+    public void testDeleteUserFromDb() {
+        User user = new User();
+        user.setUserId(1234);
+        user.setUserName("test");
+        user.setPassword("password");
+        user.setFemale(true);
+
+        userDao.addNewFemaleUserToDb(user);
+
+        int c = JdbcTestUtils.countRowsInTable(userDao.getJdbcTemplate(), "users");
+        Assert.assertTrue(c == 3);
+
+        userDao.deleteUserFromDb(1234);
+
+        int c2 = JdbcTestUtils.countRowsInTable(userDao.getJdbcTemplate(), "users");
+        Assert.assertTrue(c2 == 2);
     }
 
     @After

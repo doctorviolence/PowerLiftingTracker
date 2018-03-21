@@ -38,7 +38,7 @@ public class UserDao implements IUserDao {
         String username = user.getUserName();
         String pw = user.getPassword();
 
-        getJdbcTemplate().update(sql, new Object[]{id ,username, false, true, pw});
+        getJdbcTemplate().update(sql, new Object[]{id, username, false, true, pw});
     }
 
     public void addNewMaleUserToDb(User user) {
