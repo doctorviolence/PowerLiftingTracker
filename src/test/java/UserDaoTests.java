@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import powerlifting.config.ApplicationConfig;
 import powerlifting.dal.UserDao;
+import powerlifting.dal.exceptions.DbException;
 import powerlifting.model.User;
 
 @RunWith(SpringRunner.class)
@@ -54,7 +55,7 @@ public class UserDaoTests {
     }
 
     @Test
-    public void testDeleteUserFromDb() {
+    public void testDeleteUserFromDb() throws DbException {
         User user = new User();
         user.setUserId(1234);
         user.setUserName("test");
@@ -70,6 +71,15 @@ public class UserDaoTests {
 
         int c2 = JdbcTestUtils.countRowsInTable(userDao.getJdbcTemplate(), "users");
         Assert.assertTrue(c2 == 2);
+    }
+
+    @Test
+    public void testFindForeignKeyDependencies() {
+        boolean test = userDao.findForeignKeyConstraints(2);
+        Assert.assertTrue(test);
+
+        boolean test2 = userDao.findForeignKeyConstraints(24123123);
+        Assert.assertFalse(test2);
     }
 
     @After

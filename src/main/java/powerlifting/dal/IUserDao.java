@@ -1,5 +1,6 @@
 package powerlifting.dal;
 
+import powerlifting.dal.exceptions.DbException;
 import powerlifting.model.User;
 
 import javax.sql.DataSource;
@@ -14,8 +15,10 @@ public interface IUserDao {
 
     void addNewMaleUserToDb(User user);
 
-    void changeUserPassword(long id, String pw);
+    void changeUserPassword(long id, String pw) throws DbException;
 
-    void deleteUserFromDb(long id);
+    void deleteUserFromDb(long id) throws DbException;
+
+    boolean findForeignKeyConstraints(long id);
 
 }
