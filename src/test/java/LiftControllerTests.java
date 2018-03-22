@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -7,8 +8,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,6 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import powerlifting.Application;
 import powerlifting.controller.LiftController;
 import powerlifting.model.Bench;
+import powerlifting.model.Deadlift;
 import powerlifting.model.Squat;
 import powerlifting.service.LiftService;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -25,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -36,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class LiftControllerTests {
 
     private MockMvc mvc;
+    private JacksonTester<Deadlift> deadliftJacksonTester;
 
     @Mock
     private LiftService service;
@@ -46,7 +53,7 @@ public class LiftControllerTests {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-
+        JacksonTester.initFields(this, new ObjectMapper());
         mvc = MockMvcBuilders.standaloneSetup(liftController).build();
     }
 
@@ -74,7 +81,7 @@ public class LiftControllerTests {
         List<Bench> list = new ArrayList<>();
         list.add(bench);
 
-        service.insertLiftIntoDatabase(bench, 1);
+        service.insertBenchToDatabase(bench, 1);
 
         when(service.getBenchByUserFromDao(1)).thenReturn(list);
 
@@ -106,8 +113,8 @@ public class LiftControllerTests {
         list.add(squat);
         list.add(squat2);
 
-        service.insertLiftIntoDatabase(squat, 1);
-        service.insertLiftIntoDatabase(squat2, 1);
+        service.insertSquatToDatabase(squat, 1);
+        service.insertSquatToDatabase(squat2, 1);
 
         when(service.getSquatByUserFromDao(1)).thenReturn(list);
 
@@ -128,23 +135,47 @@ public class LiftControllerTests {
     }
 
     @Test
-    public void testInsertDeadliftIntoDb() {
-        throw new NotImplementedException();
+    public void testInsertDeadliftIntoDb() throws Exception {
+        //Deadlift deadlift = new Deadlift(3, 3, 180.0, true, 1);
+        //deadlift.setUserId(1);
+
+        mvc.perform(post("/newDeadlift")
+                .param("userId", "1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(deadliftJacksonTester.write(new Deadlift(3, 3, 180.0, true)).getJson()))
+                .andExpect(status().isCreated())
+                .andDo(print());
+
+        /*MockHttpServletResponse response = mvc.perform(post("/newDeadlift")
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(deadliftJacksonTester.write(new Deadlift(3, 3, 180.0, true, 69)).getJson()))
+                .andReturn()
+                .getResponse();
+
+        Assert.assertEquals(HttpStatus.CREATED.value(), response.getStatus());*/
     }
 
     @Test
-    public void testInsertSquatIntoDb() {
-        throw new NotImplementedException();
-    }
+    public void testInsertDeadliftIntoDbWithWrongUserId() throws Exception {
+        mvc.perform(post("/newDeadlift")
+                .param("userId", "53")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(deadliftJacksonTester.write(new Deadlift(3, 3, 180.0, true)).getJson()))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
 
-    @Test
-    public void testRemoveBenchFromDb() {
-        throw new NotImplementedException();
+        /*MockHttpServletResponse response = mvc.perform(post("/newDeadlift")
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(deadliftJacksonTester.write(new Deadlift(3, 3, 180.0, true, 69)).getJson()))
+                .andReturn()
+                .getResponse();
+
+        Assert.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());*/
     }
 
     @Test
     public void testRemoveDeadliftFromDb() {
-        throw new NotImplementedException();
+       // throw new NotImplementedException();
     }
 
     @After

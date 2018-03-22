@@ -1,15 +1,20 @@
 package powerlifting.service;
 
+import powerlifting.dal.exceptions.DbException;
 import powerlifting.model.Bench;
 import powerlifting.model.Deadlift;
-import powerlifting.model.Lift;
 import powerlifting.model.Squat;
+import powerlifting.model.User;
 
 import java.util.List;
 
 public interface ILiftService {
 
-    void insertLiftIntoDatabase(Lift lift, long userStatId);
+    void insertSquatToDatabase(Squat squat, long userStatId);
+
+    void insertBenchToDatabase(Bench bench, long userStatId);
+
+    void insertDeadliftToDatabase(Deadlift deadlift) throws DbException;
 
     void deleteSquatFromDatabase(long id, long userId);
 
@@ -22,5 +27,7 @@ public interface ILiftService {
     List<Bench> getBenchByUserFromDao(long userId);
 
     List<Deadlift> getDeadliftByUserFromDao(long userId);
+
+    User findUserInDb(long id);
 
 }

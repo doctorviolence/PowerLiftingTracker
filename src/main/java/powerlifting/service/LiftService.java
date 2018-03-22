@@ -1,12 +1,14 @@
 package powerlifting.service;
 
 import powerlifting.dal.ILiftDao;
+import powerlifting.dal.IUserDao;
+import powerlifting.dal.exceptions.DbException;
 import powerlifting.model.Bench;
 import powerlifting.model.Deadlift;
-import powerlifting.model.Lift;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import powerlifting.model.Squat;
+import powerlifting.model.User;
 
 import java.util.Date;
 import java.util.List;
@@ -15,24 +17,41 @@ import java.util.List;
 public class LiftService implements ILiftService {
 
     ILiftDao liftDao;
+    IUserDao userDao;
+    private Date dateLifted = new Date(System.currentTimeMillis());
 
     @Autowired
-    public LiftService(ILiftDao liftDao) {
+    public LiftService(ILiftDao liftDao, IUserDao userDao) {
         this.liftDao = liftDao;
+        this.userDao = userDao;
     }
 
-    public void insertLiftIntoDatabase(Lift lift, long userId) {
-        int reps = lift.getReps();
-        int sets = lift.getSets();
-        double weightLifted = lift.getWeightLifted();
-        Date dateLifted = new Date(System.currentTimeMillis());
+    public void insertSquatToDatabase(Squat s, long userId) {
+        int reps = s.getReps();
+        int sets = s.getSets();
+        double weightLifted = s.getWeightLifted();
 
-        if (lift.getClass() == Squat.class) {
-            liftDao.insertSquat(reps, sets, weightLifted, dateLifted, userId);
-        } else if (lift.getClass() == Bench.class) {
+        liftDao.insertSquat(reps, sets, weightLifted, dateLifted, userId);
+    }
+
+    public void insertBenchToDatabase(Bench b, long userId) {
+        int reps = b.getReps();
+        int sets = b.getSets();
+        double weightLifted = b.getWeightLifted();
+
+        liftDao.insertBench(reps, sets, weightLifted, dateLifted, userId);
+    }
+
+    public void insertDeadliftToDatabase(Deadlift d) throws DbException {
+        int reps = d.getReps();
+        int sets = d.getSets();
+        double weightLifted = d.getWeightLifted();
+        long userId = d.getUserId();
+
+        if (userDao.findUserById(userId) != null) {
             liftDao.insertBench(reps, sets, weightLifted, dateLifted, userId);
-        } else if (lift.getClass() == Deadlift.class) {
-            liftDao.insertDeadlift(reps, sets, weightLifted, dateLifted, userId);
+        } else {
+            throw new DbException("No user found with that id.");
         }
     }
 
@@ -58,6 +77,12 @@ public class LiftService implements ILiftService {
 
     public List<Deadlift> getDeadliftByUserFromDao(long userId) {
         return liftDao.getDeadliftByUser(userId);
+    }
+
+    public User findUserInDb(long id) {
+        User user = userDao.findUserById(id);
+
+        return user;
     }
 
 }

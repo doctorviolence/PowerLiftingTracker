@@ -11,7 +11,7 @@ public abstract class Lift {
     private int reps;
     private int sets;
     private double weightLifted;
-    private int userId;
+    private long userId;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -67,11 +67,11 @@ public abstract class Lift {
         this.dateLifted = dateLifted;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
