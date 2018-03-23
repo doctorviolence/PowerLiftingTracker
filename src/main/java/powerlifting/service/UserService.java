@@ -35,4 +35,15 @@ public class UserService implements IUserService {
         userDao.addNewFemaleUserToDb(user);
     }
 
+    public boolean findUserInDb(long id) {
+        boolean userExists = false;
+        User user = userDao.findUserById(id);
+
+        if (user != null) {
+            userExists = true;
+        }
+
+        return userExists;
+    }
+
 }

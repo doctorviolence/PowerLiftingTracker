@@ -109,7 +109,7 @@ public class LiftDao implements ILiftDao {
     }
 
     public void removeSquat(long liftId, long userId){
-        String sql = "DELETE FROM squat_lifts WHERE bench_id = ? AND user_id = ?";
+        String sql = "DELETE FROM squat_lifts WHERE squat_id = ? AND user_id = ?";
 
         getJdbcTemplate().update(sql, new Object[]{liftId, userId});
     }
@@ -121,7 +121,7 @@ public class LiftDao implements ILiftDao {
     }
 
     public void removeDeadlift(long liftId, long userId){
-        String sql = "DELETE FROM deadlift_lifts WHERE bench_id = ? AND user_id = ?";
+        String sql = "DELETE FROM deadlift_lifts WHERE deadlift_id = ? AND user_id = ?";
 
         getJdbcTemplate().update(sql, new Object[]{liftId, userId});
     }

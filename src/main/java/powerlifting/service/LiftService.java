@@ -73,15 +73,4 @@ public class LiftService implements ILiftService {
         return liftDao.getDeadliftByUser(userId);
     }
 
-    public boolean findUserInDb(long id) {
-        boolean userExists = false;
-        User user = userDao.findUserById(id);
-
-        if (user != null) {
-            userExists = true;
-        }
-
-        return userExists;
-    }
-
 }

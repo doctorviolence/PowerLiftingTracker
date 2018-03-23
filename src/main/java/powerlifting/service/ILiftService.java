@@ -27,6 +27,4 @@ public interface ILiftService {
 
     List<Deadlift> getDeadliftByUserFromDao(long userId);
 
-    boolean findUserInDb(long id);
-
 }

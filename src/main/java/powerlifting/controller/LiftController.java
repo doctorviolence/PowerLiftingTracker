@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import powerlifting.model.Squat;
 import powerlifting.service.LiftService;
+import powerlifting.service.UserService;
 
 import java.util.List;
 
@@ -20,83 +21,86 @@ Notes: Controller accepts e.g. squat as a JSON object with the following syntax:
 @RestController("liftController")
 public class LiftController {
 
-    private LiftService service;
+    private LiftService liftService;
+
+    private UserService userService;
 
     @Autowired
-    public LiftController(LiftService service) {
-        this.service = service;
+    public LiftController(LiftService liftService, UserService userService) {
+        this.liftService = liftService;
+        this.userService =  userService;
     }
 
     @GetMapping("/squat")
     @ResponseBody
     public List<Squat> getSquatByUser(@RequestParam(required = true) Long id) {
-        return service.getSquatByUserFromDao(id);
+        return liftService.getSquatByUserFromDao(id);
     }
 
     @GetMapping("/bench")
     @ResponseBody
     public List<Bench> getBenchByUser(@RequestParam(required = true) Long id) {
-        return service.getBenchByUserFromDao(id);
+        return liftService.getBenchByUserFromDao(id);
     }
 
     @GetMapping("/deadlift")
     @ResponseBody
     public List<Deadlift> getDeadliftByUser(@RequestParam(required = true) Long id) {
-        return service.getDeadliftByUserFromDao(id);
+        return liftService.getDeadliftByUserFromDao(id);
     }
 
     @PostMapping(value = "/insertsquat", consumes = "application/json")
     public ResponseEntity insertNewSquat(@RequestBody Squat squat, @RequestParam("id") Long id) {
-        boolean user = service.findUserInDb(id);
+        boolean user = userService.findUserInDb(id);
 
         if (!user) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No such user.");
         } else {
-            service.insertSquatToDatabase(squat, id);
+            liftService.insertSquatToDatabase(squat, id);
             return ResponseEntity.status(HttpStatus.CREATED).body("Squat inserted");
         }
     }
 
     @PostMapping(value = "/insertbench", consumes = "application/json")
     public ResponseEntity insertNewBench(@RequestBody Bench bench, @RequestParam("id") Long id) {
-        boolean user = service.findUserInDb(id);
+        boolean user = userService.findUserInDb(id);
 
         if (!user) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No such user.");
         } else {
-            service.insertBenchToDatabase(bench, id);
+            liftService.insertBenchToDatabase(bench, id);
             return ResponseEntity.status(HttpStatus.CREATED).body("Bench inserted");
         }
     }
 
     @PostMapping(value = "/insertdeadlift", consumes = "application/json")
     public ResponseEntity insertNewDeadlift(@RequestBody Deadlift deadlift, @RequestParam("id") Long id) {
-        boolean user = service.findUserInDb(id);
+        boolean user = userService.findUserInDb(id);
 
         if (!user) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No such user.");
         } else {
-            service.insertDeadliftToDatabase(deadlift, id);
+            liftService.insertDeadliftToDatabase(deadlift, id);
             return ResponseEntity.status(HttpStatus.CREATED).body("Deadlift inserted");
         }
     }
 
-    @RequestMapping(value = "deletesquat/{id}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteSquat(@PathVariable("id") Long id, Long userId) {
-        service.deleteSquatFromDatabase(id, userId);
+    @DeleteMapping(value = "deletesquat")
+    public ResponseEntity deleteSquat(@RequestParam("id") Long id, @RequestParam("userId") Long userId) {
+        liftService.deleteSquatFromDatabase(id, userId);
+        return ResponseEntity.status(HttpStatus.OK).body("Squat deleted");
     }
 
-    @RequestMapping(value = "deletebench/{id}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteBench(@PathVariable("id") Long id, Long userId) {
-        service.deleteBenchFromDatabase(id, userId);
+    @DeleteMapping(value = "deletebench")
+    public ResponseEntity deleteBench(@RequestParam("id") Long id, @RequestParam("userId") Long userId) {
+        liftService.deleteBenchFromDatabase(id, userId);
+        return ResponseEntity.status(HttpStatus.OK).body("Bench deleted");
     }
 
-    @RequestMapping(value = "deletedeadlift/{id}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteDeadlift(@PathVariable("id") Long id, Long userId) {
-        service.deleteDeadliftFromDatabase(id, userId);
+    @DeleteMapping(value = "deletedeadlift")
+    public ResponseEntity deleteDeadlift(@RequestParam("id") Long id, @RequestParam("userId") Long userId) {
+        liftService.deleteDeadliftFromDatabase(id, userId);
+        return ResponseEntity.status(HttpStatus.OK).body("Deadlift deleted");
     }
 
 }
