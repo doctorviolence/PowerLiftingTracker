@@ -1,7 +1,6 @@
 package powerlifting.controller;
 
 import org.springframework.http.ResponseEntity;
-import powerlifting.dal.exceptions.DbException;
 import powerlifting.model.Bench;
 import powerlifting.model.Deadlift;
 
@@ -9,14 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import powerlifting.model.Squat;
-import powerlifting.model.User;
 import powerlifting.service.LiftService;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-import static sun.plugin2.util.PojoUtil.toJson;
+/*
 
+Notes: Controller accepts e.g. squat as a JSON object with the following syntax: {"reps":5,"sets":3,"weightLifted":100}
+
+*/
 @RestController("liftController")
 public class LiftController {
 
@@ -27,46 +27,57 @@ public class LiftController {
         this.service = service;
     }
 
-    @GetMapping("/{id}/squat")
+    @GetMapping("/squat")
     @ResponseBody
-    public List<Squat> getSquatByUser(Long id) {
+    public List<Squat> getSquatByUser(@RequestParam(required = true) Long id) {
         return service.getSquatByUserFromDao(id);
     }
 
-    @GetMapping("/{id}/bench")
+    @GetMapping("/bench")
     @ResponseBody
     public List<Bench> getBenchByUser(@RequestParam(required = true) Long id) {
         return service.getBenchByUserFromDao(id);
     }
 
-    @GetMapping("/{id}/deadlift")
+    @GetMapping("/deadlift")
     @ResponseBody
-    public List<Deadlift> getDeadliftByUser(Long id) {
+    public List<Deadlift> getDeadliftByUser(@RequestParam(required = true) Long id) {
         return service.getDeadliftByUserFromDao(id);
     }
 
-    @PostMapping("/newSquat")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void insertNewSquat(@RequestBody Squat squat, Long id) {
-        service.insertSquatToDatabase(squat, id);
-    }
+    @PostMapping(value = "/insertsquat", consumes = "application/json")
+    public ResponseEntity insertNewSquat(@RequestBody Squat squat, @RequestParam("id") Long id) {
+        boolean user = service.findUserInDb(id);
 
-    @PostMapping("/newBench")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void insertNewBench(@RequestBody Bench bench, Long id) {
-        service.insertBenchToDatabase(bench, id);
-    }
-
-    @PostMapping(value = "/newDeadlift", consumes = "application/json")
-    //@ResponseStatus//(HttpStatus.CREATED)
-    public ResponseEntity<Deadlift> insertNewDeadlift(@RequestBody Deadlift deadlift, @RequestParam("userId") Long id) throws DbException {
-        User user = service.findUserInDb(id);
-
-        if (user != null) {
-            service.insertDeadliftToDatabase(deadlift);
-            return new ResponseEntity<Deadlift>(deadlift, HttpStatus.CREATED);
+        if (!user) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No such user.");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            service.insertSquatToDatabase(squat, id);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Squat inserted");
+        }
+    }
+
+    @PostMapping(value = "/insertbench", consumes = "application/json")
+    public ResponseEntity insertNewBench(@RequestBody Bench bench, @RequestParam("id") Long id) {
+        boolean user = service.findUserInDb(id);
+
+        if (!user) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No such user.");
+        } else {
+            service.insertBenchToDatabase(bench, id);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Bench inserted");
+        }
+    }
+
+    @PostMapping(value = "/insertdeadlift", consumes = "application/json")
+    public ResponseEntity insertNewDeadlift(@RequestBody Deadlift deadlift, @RequestParam("id") Long id) {
+        boolean user = service.findUserInDb(id);
+
+        if (!user) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No such user.");
+        } else {
+            service.insertDeadliftToDatabase(deadlift, id);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Deadlift inserted");
         }
     }
 

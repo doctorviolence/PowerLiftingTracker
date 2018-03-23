@@ -2,7 +2,6 @@ package powerlifting.service;
 
 import powerlifting.dal.ILiftDao;
 import powerlifting.dal.IUserDao;
-import powerlifting.dal.exceptions.DbException;
 import powerlifting.model.Bench;
 import powerlifting.model.Deadlift;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,17 +41,12 @@ public class LiftService implements ILiftService {
         liftDao.insertBench(reps, sets, weightLifted, dateLifted, userId);
     }
 
-    public void insertDeadliftToDatabase(Deadlift d) throws DbException {
+    public void insertDeadliftToDatabase(Deadlift d, long userId) {
         int reps = d.getReps();
         int sets = d.getSets();
         double weightLifted = d.getWeightLifted();
-        long userId = d.getUserId();
 
-        if (userDao.findUserById(userId) != null) {
-            liftDao.insertBench(reps, sets, weightLifted, dateLifted, userId);
-        } else {
-            throw new DbException("No user found with that id.");
-        }
+        liftDao.insertDeadlift(reps, sets, weightLifted, dateLifted, userId);
     }
 
     public void deleteSquatFromDatabase(long liftId, long userId) {
@@ -79,10 +73,15 @@ public class LiftService implements ILiftService {
         return liftDao.getDeadliftByUser(userId);
     }
 
-    public User findUserInDb(long id) {
+    public boolean findUserInDb(long id) {
+        boolean userExists = false;
         User user = userDao.findUserById(id);
 
-        return user;
+        if (user != null) {
+            userExists = true;
+        }
+
+        return userExists;
     }
 
 }

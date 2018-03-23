@@ -8,6 +8,7 @@ import powerlifting.model.User;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import java.util.List;
 
 public class UserDao implements IUserDao {
 
@@ -27,9 +28,13 @@ public class UserDao implements IUserDao {
     public User findUserById(long id) {
         String sql = "SELECT * FROM users u WHERE u.user_id = ?";
 
-        User user = (User) getJdbcTemplate().queryForObject(sql, new Object[]{id}, new UserMapper());
+        List<User> list = getJdbcTemplate().query(sql, new UserMapper(), new Object[]{id});
 
-        return user;
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
+        }
     }
 
     public void addNewFemaleUserToDb(User user) {
@@ -58,7 +63,7 @@ public class UserDao implements IUserDao {
         User user = findUserById(id);
 
         if (user != null) {
-            int userId = user.getUserId();
+            long userId = user.getUserId();
 
             getJdbcTemplate().update(sql, new Object[]{pw, userId});
         } else {
@@ -73,7 +78,7 @@ public class UserDao implements IUserDao {
         User user = findUserById(id);
 
         if (user != null) {
-            int userId = user.getUserId();
+            long userId = user.getUserId();
             String username = user.getUserName();
 
             if (!findForeignKeyConstraints(userId)) {

@@ -8,9 +8,9 @@ public class Bench extends Lift {
 
     }
 
-    public Bench(int reps, int sets, double weightLifted, boolean bench) {
+    public Bench(int reps, int sets, double weightLifted) {
         super(reps, sets, weightLifted);
-        this.bench = bench;
+        this.bench = true;
     }
 
     public void setBench(boolean bench) {

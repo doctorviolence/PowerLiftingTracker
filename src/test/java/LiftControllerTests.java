@@ -1,4 +1,3 @@
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,11 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,13 +20,12 @@ import powerlifting.model.Bench;
 import powerlifting.model.Deadlift;
 import powerlifting.model.Squat;
 import powerlifting.service.LiftService;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import powerlifting.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -42,10 +37,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class LiftControllerTests {
 
     private MockMvc mvc;
-    private JacksonTester<Deadlift> deadliftJacksonTester;
 
     @Mock
-    private LiftService service;
+    private LiftService liftService;
+
+    @Mock
+    private UserService userService;
 
     @InjectMocks
     private LiftController liftController;
@@ -53,7 +50,7 @@ public class LiftControllerTests {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        JacksonTester.initFields(this, new ObjectMapper());
+
         mvc = MockMvcBuilders.standaloneSetup(liftController).build();
     }
 
@@ -64,7 +61,8 @@ public class LiftControllerTests {
 
     @Test
     public void testIsServiceNull() {
-        Assert.assertNotNull(service);
+        Assert.assertNotNull(liftService);
+        Assert.assertNotNull(userService);
     }
 
     @Test
@@ -74,18 +72,18 @@ public class LiftControllerTests {
 
     @Test
     public void testGetBenchByUserInDb() throws Exception {
-        Bench bench = new Bench(5, 3, 100, true);
+        Bench bench = new Bench(5, 3, 100);
         bench.setUserId(1);
         bench.setLiftId(69);
 
         List<Bench> list = new ArrayList<>();
         list.add(bench);
 
-        service.insertBenchToDatabase(bench, 1);
+        liftService.insertBenchToDatabase(bench, 1);
 
-        when(service.getBenchByUserFromDao(1)).thenReturn(list);
+        when(liftService.getBenchByUserFromDao(1)).thenReturn(list);
 
-        mvc.perform(get("/{id}/bench", 1)
+        mvc.perform(get("/bench", 1)
                 .param("id", "1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(status().isOk())
@@ -101,11 +99,11 @@ public class LiftControllerTests {
 
     @Test
     public void testGetSquatsByUserInDb() throws Exception {
-        Squat squat = new Squat(1, 1, 180, true);
+        Squat squat = new Squat(1, 1, 180);
         squat.setUserId(1);
         squat.setLiftId(69);
 
-        Squat squat2 = new Squat(3, 3, 140, true);
+        Squat squat2 = new Squat(3, 3, 140);
         squat2.setUserId(1);
         squat2.setLiftId(87);
 
@@ -113,12 +111,12 @@ public class LiftControllerTests {
         list.add(squat);
         list.add(squat2);
 
-        service.insertSquatToDatabase(squat, 1);
-        service.insertSquatToDatabase(squat2, 1);
+        liftService.insertSquatToDatabase(squat, 1);
+        liftService.insertSquatToDatabase(squat2, 1);
 
-        when(service.getSquatByUserFromDao(1)).thenReturn(list);
+        when(liftService.getSquatByUserFromDao(1)).thenReturn(list);
 
-        mvc.perform(get("/{id}/squat", 1)
+        mvc.perform(get("/squat", 1)
                 .param("id", "1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(status().isOk())
@@ -134,43 +132,32 @@ public class LiftControllerTests {
                 .andDo(print());
     }
 
+
+    // Test fails yet works fine when I try it on Postman. Leaving this for now as it's giving me a headache...
     @Test
     public void testInsertDeadliftIntoDb() throws Exception {
-        //Deadlift deadlift = new Deadlift(3, 3, 180.0, true, 1);
-        //deadlift.setUserId(1);
+        userService.insertMaleUserToDatabase(1, "Test", "Password");
 
-        mvc.perform(post("/newDeadlift")
-                .param("userId", "1")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(deadliftJacksonTester.write(new Deadlift(3, 3, 180.0, true)).getJson()))
+        mvc.perform(post("/insertdeadlift")
+                .param("id", "1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content("{\"reps\":5,\"sets\":3,\"weightLifted\":97.5}"))
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andDo(print());
-
-        /*MockHttpServletResponse response = mvc.perform(post("/newDeadlift")
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(deadliftJacksonTester.write(new Deadlift(3, 3, 180.0, true, 69)).getJson()))
-                .andReturn()
-                .getResponse();
-
-        Assert.assertEquals(HttpStatus.CREATED.value(), response.getStatus());*/
     }
 
     @Test
     public void testInsertDeadliftIntoDbWithWrongUserId() throws Exception {
-        mvc.perform(post("/newDeadlift")
-                .param("userId", "53")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(deadliftJacksonTester.write(new Deadlift(3, 3, 180.0, true)).getJson()))
+        Deadlift deadlift = new Deadlift(3, 3, 180.0);
+        deadlift.setUserId(1);
+
+        mvc.perform(post("/insertdeadlift")
+                .param("id", "23213")
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content("{\"reps\":5,\"sets\":3,\"weightLifted\":97.5}"))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
-
-        /*MockHttpServletResponse response = mvc.perform(post("/newDeadlift")
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(deadliftJacksonTester.write(new Deadlift(3, 3, 180.0, true, 69)).getJson()))
-                .andReturn()
-                .getResponse();
-
-        Assert.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());*/
     }
 
     @Test
@@ -180,7 +167,8 @@ public class LiftControllerTests {
 
     @After
     public void tearDown() {
-        service = null;
+        liftService = null;
+        userService = null;
         mvc = null;
     }
 

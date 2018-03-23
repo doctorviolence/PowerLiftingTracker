@@ -8,9 +8,9 @@ public class Deadlift extends Lift {
 
     }
 
-    public Deadlift(int reps, int sets, double weightLifted, boolean deadlift){
+    public Deadlift(int reps, int sets, double weightLifted){
         super(reps, sets, weightLifted);
-        this.deadlift = deadlift;
+        this.deadlift = true;
     }
 
     public void setDeadlift(boolean deadlift) {

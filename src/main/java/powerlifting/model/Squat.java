@@ -8,9 +8,9 @@ public class Squat extends Lift {
 
     }
 
-    public Squat(int reps, int sets, double weightLifted, boolean squat){
+    public Squat(int reps, int sets, double weightLifted){
         super(reps, sets, weightLifted);
-        this.squat = squat;
+        this.squat = true;
     }
 
     public void setSquat(boolean squat) {
