@@ -162,7 +162,11 @@ public class LiftControllerTests {
 
     @Test
     public void testRemoveDeadliftFromDb() {
-       // throw new NotImplementedException();
+              mvc.perform(delete("/deletedeadlift")
+               .param("id", "1")
+               .param("userId", "1"))
+               .andDo(print())
+               .andExpect(status().isOk());
     }
 
     @After
