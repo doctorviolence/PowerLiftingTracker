@@ -114,6 +114,22 @@ public class LiftDaoTests {
         Assert.assertTrue(getUpdatedLiftsByUser2.size() == 0);
     }
 
+    @Test
+    public void testGettingTopFivePRs() {
+        List<Squat> squatPRs = liftDao.getTopFiveSquatPRs(1);
+        Assert.assertTrue(squatPRs.size() == 1);
+        Assert.assertFalse(squatPRs.size() == 5);
+        Assert.assertTrue(squatPRs.get(0).getWeightLifted() == 100);
+
+        List<Bench> benchPRs = liftDao.getTopFiveBenchPRs(1);
+        Assert.assertTrue(benchPRs.size() == 2);
+        Assert.assertTrue(benchPRs.get(0).getWeightLifted() == 140);
+        Assert.assertTrue(benchPRs.get(1).getWeightLifted() == 110);
+
+        List<Deadlift> deadliftPRs = liftDao.getTopFiveDeadliftPRs(5);
+        Assert.assertTrue(deadliftPRs.size() == 0);
+    }
+
     @After
     public void tearDown() {
         liftDao = null;

@@ -161,12 +161,21 @@ public class LiftControllerTests {
     }
 
     @Test
-    public void testRemoveDeadliftFromDb() {
-              mvc.perform(delete("/deletedeadlift")
+    public void testRemoveDeadliftFromDb() throws Exception {
+       mvc.perform(delete("/deletedeadlift")
                .param("id", "1")
                .param("userId", "1"))
                .andDo(print())
                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testRemoveDeadliftFromDbWithWrongId() throws Exception {
+        mvc.perform(delete("/deletedeadlift")
+                .param("id", "23123")
+                .param("userId", "1"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @After

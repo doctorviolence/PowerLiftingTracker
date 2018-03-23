@@ -49,11 +49,43 @@ public class LiftDao implements ILiftDao {
                 "WHERE u.user_id = d.user_id " +
                 "AND u.user_id = ?;";
 
-        List lifts = getJdbcTemplate().query(sql, new BenchMapper(), new Object[]{userId});
+        return getJdbcTemplate().query(sql, new BenchMapper(), new Object[]{userId});
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Squat> getTopFiveSquatPRs(int reps) {
+        String sql = "SELECT * FROM squat_lifts s " +
+                "WHERE s.reps = ? " +
+                "ORDER BY s.weight_lifted DESC LIMIT 5;";
+
+        List<Squat> lifts = getJdbcTemplate().query(sql, new SquatMapper(), new Object[]{reps});
 
         return lifts;
     }
 
+    @SuppressWarnings("unchecked")
+    public List<Bench> getTopFiveBenchPRs(int reps) {
+        String sql = "SELECT * FROM bench_lifts b " +
+                "WHERE b.reps = ? " +
+                "ORDER BY b.weight_lifted DESC LIMIT 5;";
+
+        List<Bench> lifts = getJdbcTemplate().query(sql, new BenchMapper(), new Object[]{reps});
+
+        return lifts;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Deadlift> getTopFiveDeadliftPRs(int reps) {
+        String sql = "SELECT * FROM deadlift_lifts d " +
+                "WHERE d.reps = ? " +
+                "ORDER BY d.weight_lifted DESC LIMIT 5;";
+
+        List<Deadlift> lifts = getJdbcTemplate().query(sql, new DeadliftMapper(), new Object[]{reps});
+
+        return lifts;
+    }
+
+    @SuppressWarnings("unchecked")
     public List<Squat> getSquatByUser(long userId) {
         String sql = "SELECT * " +
                 "FROM squat_lifts s, users u " +
@@ -66,6 +98,7 @@ public class LiftDao implements ILiftDao {
         return lifts;
     }
 
+    @SuppressWarnings("unchecked")
     public List<Bench> getBenchByUser(long userId) {
         String sql = "SELECT * " +
                 "FROM bench_lifts b, users u " +
@@ -78,6 +111,7 @@ public class LiftDao implements ILiftDao {
         return lifts;
     }
 
+    @SuppressWarnings("unchecked")
     public List<Deadlift> getDeadliftByUser(long userId) {
         String sql = "SELECT * " +
                 "FROM deadlift_lifts d, users u " +
@@ -108,19 +142,19 @@ public class LiftDao implements ILiftDao {
         getJdbcTemplate().update(sql, new Object[]{reps, sets, weightLifted, dateLifted, true, userId});
     }
 
-    public void removeSquat(long liftId, long userId){
+    public void removeSquat(long liftId, long userId) {
         String sql = "DELETE FROM squat_lifts WHERE squat_id = ? AND user_id = ?";
 
         getJdbcTemplate().update(sql, new Object[]{liftId, userId});
     }
 
-    public void removeBench(long liftId, long userId){
+    public void removeBench(long liftId, long userId) {
         String sql = "DELETE FROM bench_lifts WHERE bench_id = ? AND user_id = ?";
 
         getJdbcTemplate().update(sql, new Object[]{liftId, userId});
     }
 
-    public void removeDeadlift(long liftId, long userId){
+    public void removeDeadlift(long liftId, long userId) {
         String sql = "DELETE FROM deadlift_lifts WHERE deadlift_id = ? AND user_id = ?";
 
         getJdbcTemplate().update(sql, new Object[]{liftId, userId});

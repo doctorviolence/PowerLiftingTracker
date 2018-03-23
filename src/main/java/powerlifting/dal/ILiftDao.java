@@ -15,6 +15,12 @@ public interface ILiftDao {
 
     List<Lift> getLiftsByUser(long userId);
 
+    List<Squat> getTopFiveSquatPRs(int reps);
+
+    List<Bench> getTopFiveBenchPRs(int reps);
+
+    List<Deadlift> getTopFiveDeadliftPRs(int reps);
+
     List<Squat> getSquatByUser(long userId);
 
     List<Bench> getBenchByUser(long userId);
